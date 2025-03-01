@@ -3,4 +3,4 @@
 soon lol
 
 ```lua
-soon
+loadstring(game:HttpGet("https://raw.githubusercontent.com/S0up120/DandyWorldScript/refs/heads/main/TheSoupHub/Script"))()
