@@ -2,4 +2,4 @@
 
 soon lol
 
-[ Soon ]
+[Soon]
