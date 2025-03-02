@@ -1,0 +1,89 @@
+local DwUI = {}
+
+function DwUI:CreateWindow(title)
+    local player = game.Players.LocalPlayer
+    local gui = Instance.new("ScreenGui")
+    gui.Parent = game.CoreGui
+     gui.Name = DwUI
+
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Size = UDim2.new(0, 300, 0, 200)
+    mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    mainFrame.BorderSizePixel = 2
+    mainFrame.Parent = gui
+
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(1, 0, 0, 30)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+    titleLabel.Text = title
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.Font = Enum.Font.SourceSansBold
+    titleLabel.TextSize = 20
+    titleLabel.Parent = mainFrame
+
+    local window = {
+        Frame = mainFrame,
+        Tabs = {},
+        CurrentTab = nil
+    }
+    setmetatable(window, {__index = DwUI})
+    return window
+end
+
+function DwUI:CreateTab(name)
+    local tab = Instance.new("Frame")
+    tab.Size = UDim2.new(1, 0, 1, -40)
+    tab.Position = UDim2.new(0, 0, 0, 40)
+    tab.BackgroundTransparency = 1
+    tab.Parent = self.Frame
+    tab.Visible = false
+
+    self.Tabs[name] = tab
+    if not self.CurrentTab then
+        self:SwitchTab(name)
+    end
+
+    return tab
+end
+
+function DwUI:SwitchTab(name)
+    for tabName, tab in pairs(self.Tabs) do
+        tab.Visible = (tabName == name)
+    end
+    self.CurrentTab = name
+end
+
+function DwUI:AddButton(tab, name, imageId, callback)
+    local button = Instance.new("Frame")
+    button.Size = UDim2.new(0, 250, 0, 40)
+    button.Position = UDim2.new(0, 10, 0, 40 + (#tab:GetChildren() - 1) * 50)
+    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.BorderSizePixel = 2
+    button.Parent = tab
+
+    local icon = Instance.new("ImageLabel")
+    icon.Size = UDim2.new(0, 30, 0, 30)
+    icon.Position = UDim2.new(0, 5, 0.5, -15)
+    icon.BackgroundTransparency = 1
+    icon.Image = imageId
+    icon.Parent = button
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, -40, 1, 0)
+    textLabel.Position = UDim2.new(0, 40, 0, 0)
+    textLabel.Text = name
+    textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextSize = 18
+    textLabel.BackgroundTransparency = 1
+    textLabel.Parent = button
+
+    local buttonClick = Instance.new("TextButton")
+    buttonClick.Size = UDim2.new(1, 0, 1, 0)
+    buttonClick.BackgroundTransparency = 1
+    buttonClick.Parent = button
+    buttonClick.MouseButton1Click:Connect(callback)
+end
+
+return DwUI
